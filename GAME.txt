@@ -1,0 +1,15 @@
+Samin Shahriar Tokey
+sstokey@wpi.edu
+
+Features Implemented:
+	1. Enmies now oscillate at a random speed
+	2. The default bullet property was replaced with two different types of weapon. i.e: Lasers and Heat Seekers
+	3. Right Click to shoot laser at a straight path
+	4. Left click will fire 3 Heat Seeking missiles. The missiles will lock on to
+		3 random saucer target. The targets locked on will turn red. If the missiles 
+		get destroyed before hitting the target, the saucer will no longer be marked 
+		and will turn green.
+	5. Player can now move a bit more smoothly, and it can move horizontally using a/d button.
+	6. Player now has 3 nukes instead of one.
+	7. Sprites for the weapons are changed.
+	
