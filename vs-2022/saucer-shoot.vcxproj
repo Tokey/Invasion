@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Project 2b\SFML Tester\Grasshopper2b\Grasshopper2b\x64\Debug\TankCannon.cpp" />
+    <ClCompile Include="..\Cannon.cpp" />
     <ClCompile Include="..\HomingMissile.cpp" />
     <ClCompile Include="..\EventNuke.cpp" />
     <ClCompile Include="..\Explosion.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Project 2b\SFML Tester\Grasshopper2b\Grasshopper2b\x64\Debug\TankCannon.h" />
+    <ClInclude Include="..\Cannon.h" />
     <ClInclude Include="..\HomingMissile.h" />
     <ClInclude Include="..\EventNuke.h" />
     <ClInclude Include="..\Explosion.h" />

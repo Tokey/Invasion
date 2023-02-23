@@ -30,11 +30,14 @@ Hero::Hero() {
     move_slowdown = 0.02;
     move_countdown = move_slowdown;
 
-    fire_slowdown = 35;
-    fire_countdown = fire_slowdown;
+    missile_slowdown = 35;
+    missile_countdown = missile_slowdown;
 
     laser_slowdown = 5;
     laser_countdown = laser_slowdown;
+
+    cannon_slowdown = 10;
+    cannon_countdown = cannon_slowdown;
 
    // Create reticle for firing bullets.
     p_reticle = new Reticle();
@@ -42,6 +45,18 @@ Hero::Hero() {
 
     nuke_count = 3;
     SelectedWeapon = Weapon::LaserGun;
+    
+    laserCount = 100;
+    missileCount = 10;
+    cannonCount = 30;
+
+    w_vo = new df::ViewObject; // Weapons
+    w_vo->setLocation(df::TOP_CENTER);
+    w_vo->setValue(laserCount);
+    w_vo->setViewString("Laser");
+    w_vo->setColor(df::WHITE);
+
+   
 }
 
 Hero::~Hero() {
@@ -123,15 +138,34 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
             fireHomingMissile(p_mouse_event->getMousePosition());
         else if(SelectedWeapon == Weapon::LaserGun)
             fireLaser(p_mouse_event->getMousePosition());
+        else if (SelectedWeapon == Weapon::CannonGun)
+            fireCannon(p_mouse_event->getMousePosition());
     }
 
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
         (p_mouse_event->getMouseButton() == df::Mouse::RIGHT))
     {
         if (SelectedWeapon == Weapon::HomingMissileLauncher)
+        {
             SelectedWeapon = LaserGun;
+            w_vo->setViewString("Laser");
+            w_vo->setValue(laserCount);
+        }
         else if (SelectedWeapon == Weapon::LaserGun)
+        {
+            SelectedWeapon = CannonGun;
+            w_vo->setViewString("Cannon");
+            w_vo->setValue(cannonCount);
+        }
+        else if (SelectedWeapon == Weapon::CannonGun)
+        {
             SelectedWeapon = HomingMissileLauncher;
+            w_vo->setViewString("Missile");
+            w_vo->setValue(missileCount);
+        }
+
+        
+        
 
         // Play "Weapon Change" sound.
         df::Sound* p_sound = RM.getSound("weaponChange");
@@ -165,12 +199,28 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
 
     case df::Keyboard::A:    // left
         if (p_keyboard_event->getKeyboardAction() == df::KEY_DOWN)
-            moveFWB(-1.3);
+
+        {
+            if (SelectedWeapon == Weapon::LaserGun)
+                moveFWB(-2);
+            else if (SelectedWeapon == Weapon::CannonGun)
+                moveFWB(-1.3);
+            else if (SelectedWeapon == Weapon::HomingMissileLauncher)
+                moveFWB(-.7);
+        }
+
         break;
 
     case df::Keyboard::D:    // right
         if (p_keyboard_event->getKeyboardAction() == df::KEY_DOWN)
-            moveFWB(+1.3);
+        {
+            if (SelectedWeapon == Weapon::LaserGun)
+                moveFWB(2);
+            else if (SelectedWeapon == Weapon::CannonGun)
+                moveFWB(1.3);
+            else if (SelectedWeapon == Weapon::HomingMissileLauncher)
+                moveFWB(.7);
+        }
         break;
 
     case df::Keyboard::SPACE:
@@ -193,13 +243,17 @@ void Hero::step() {
 
     // NOTE - in step()
     // Fire countdown.
-    fire_countdown--;
-    if (fire_countdown < 0)
-        fire_countdown = 0;
+    missile_countdown--;
+    if (missile_countdown < 0)
+        missile_countdown = 0;
 
     laser_countdown--;
     if (laser_countdown < 0)
         laser_countdown = 0;
+
+    cannon_countdown--;
+    if (cannon_countdown < 0)
+        cannon_countdown = 0;
 
 
     std::vector<Object*> saucerArray;
@@ -223,18 +277,24 @@ void Hero::step() {
 }
 
 void Hero::fireHomingMissile(df::Vector target) {
-    if (fire_countdown > 0)
+    if (missileCount <= 0) // TODO ADD NO BULLET SOUND HERE
         return;
-    fire_countdown = fire_slowdown;
+
+    if (missile_countdown > 0)
+        return;
+    missile_countdown = missile_slowdown;
 
     // Fire Bullet towards target.
-  // Compute normalized vector to position, then scale by speed (1).
+    // Compute normalized vector to position, then scale by speed (1).
     //df::Vector v = target - getPosition();
     //v.normalize();
     //v.scale(1);
+    
+    missileCount -= 2;
+    w_vo->setValue(missileCount);
 
-
-    new HomingMissile(df::Vector(getPosition().getX(), getPosition().getY()+2));
+    new HomingMissile(df::Vector(getPosition().getX()+1, getPosition().getY()+2));
+    new HomingMissile(df::Vector(getPosition().getX()-1, getPosition().getY()+2));
     //p->setVelocity(v);
 
     // Play "fire" sound.
@@ -244,9 +304,16 @@ void Hero::fireHomingMissile(df::Vector target) {
 }
 
 void Hero::fireLaser(df::Vector target) {
+
+    if (laserCount <= 0) // TODO ADD NO BULLET SOUND HERE
+        return;
+
     if (laser_countdown > 0)
         return;
     laser_countdown = laser_slowdown;
+
+    laserCount--;
+    w_vo->setValue(laserCount);
 
     // Fire Bullet towards target.
   // Compute normalized vector to position, then scale by speed (1).
@@ -256,6 +323,32 @@ void Hero::fireLaser(df::Vector target) {
     Laser* p = new Laser(getPosition());
     p->setVelocity(v);
     
+    // Play "fire" sound.
+    df::Sound* p_sound = RM.getSound("fire");
+    if (p_sound)
+        p_sound->play();
+}
+
+void Hero::fireCannon(df::Vector target) {
+
+    if (cannonCount <= 0) // TODO ADD NO BULLET SOUND HERE
+        return;
+
+    if (cannon_countdown > 0)
+        return;
+    cannon_countdown = cannon_slowdown;
+
+    cannonCount--;
+    w_vo->setValue(cannonCount);
+
+    // Fire Bullet towards target.
+  // Compute normalized vector to position, then scale by speed (1).
+    df::Vector v = target - getPosition();
+    v.normalize();
+    v.scale(1);
+    Laser* p = new Laser(getPosition());
+    p->setVelocity(v);
+
     // Play "fire" sound.
     df::Sound* p_sound = RM.getSound("fire");
     if (p_sound)

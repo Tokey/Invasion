@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\..\Project 2b\SFML Tester\Grasshopper2b\Grasshopper2b\x64\Debug\TankCannon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Cannon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Tank.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Project 2b\SFML Tester\Grasshopper2b\Grasshopper2b\x64\Debug\TankCannon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Cannon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
