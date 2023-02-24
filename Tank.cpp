@@ -174,7 +174,7 @@ void Tank::step() {
 	}
 	else
 	{
-		setVelocity(df::Vector(2.0f * sinVal * (rand()%5), 0.f));
+		setVelocity(df::Vector(rateOfFire/5 * sinVal * (rand()%5), 0.f));
 
 		weaponCooldown -= 0.033; // Assuming this will alawys run at 30 fps
 		if (weaponCooldown <= 0) {

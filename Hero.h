@@ -29,6 +29,8 @@ private:
 
     int nuke_count;
 
+    int waveNumber;
+
 private:
     Reticle* p_reticle;
 
@@ -42,10 +44,21 @@ public:
     
     int eventHandler(const df::Event* p_e) override;
 
-    df::ViewObject* w_vo = nullptr;
+    df::ViewObject* weapon_vo = nullptr;
+    df::ViewObject* wave_vo = nullptr;
 
     int laserCount;
     int missileCount;
     int cannonCount;
 
+    float laserRegenDuration;
+    float missileRegenDuration;
+    float cannonRegenDuration;
+
+    float laserRegenTimer;
+    float missileRegenTimer;
+    float cannonRegenTimer;
+
+    bool tankStartPosCheck;
+    bool weaponLocked;
 };

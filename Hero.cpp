@@ -50,13 +50,29 @@ Hero::Hero() {
     missileCount = 10;
     cannonCount = 30;
 
-    w_vo = new df::ViewObject; // Weapons
-    w_vo->setLocation(df::TOP_CENTER);
-    w_vo->setValue(laserCount);
-    w_vo->setViewString("Laser");
-    w_vo->setColor(df::WHITE);
+    waveNumber = 1;
 
-   
+    weapon_vo = new df::ViewObject; // Weapons
+    weapon_vo->setLocation(df::TOP_CENTER);
+    weapon_vo->setValue(laserCount);
+    weapon_vo->setViewString("Laser");
+    weapon_vo->setColor(df::WHITE);
+
+    wave_vo = new df::ViewObject; // Wave
+    wave_vo->setLocation(df::BOTTOM_CENTER);
+    wave_vo->setValue(waveNumber);
+    wave_vo->setViewString("Wave");
+    wave_vo->setColor(df::GREEN);
+    
+    laserRegenDuration = 1;
+    missileRegenDuration = 5;
+    cannonRegenDuration = 3;
+
+    laserRegenTimer = laserRegenDuration;
+    missileRegenTimer = missileRegenDuration;
+    cannonRegenTimer = cannonRegenDuration;
+
+    weaponLocked = true;
 }
 
 Hero::~Hero() {
@@ -132,7 +148,7 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
 
   // Pressed button?
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
-        (p_mouse_event->getMouseButton() == df::Mouse::LEFT))
+        (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && !weaponLocked)
     {
         if(SelectedWeapon == Weapon::HomingMissileLauncher)
             fireHomingMissile(p_mouse_event->getMousePosition());
@@ -148,24 +164,21 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
         if (SelectedWeapon == Weapon::HomingMissileLauncher)
         {
             SelectedWeapon = LaserGun;
-            w_vo->setViewString("Laser");
-            w_vo->setValue(laserCount);
+            weapon_vo->setViewString("Laser");
+            weapon_vo->setValue(laserCount);
         }
         else if (SelectedWeapon == Weapon::LaserGun)
         {
             SelectedWeapon = CannonGun;
-            w_vo->setViewString("Cannon");
-            w_vo->setValue(cannonCount);
+            weapon_vo->setViewString("Cannon");
+            weapon_vo->setValue(cannonCount);
         }
         else if (SelectedWeapon == Weapon::CannonGun)
         {
             SelectedWeapon = HomingMissileLauncher;
-            w_vo->setViewString("Missile");
-            w_vo->setValue(missileCount);
-        }
-
-        
-        
+            weapon_vo->setViewString("Missile");
+            weapon_vo->setValue(missileCount);
+        } 
 
         // Play "Weapon Change" sound.
         df::Sound* p_sound = RM.getSound("weaponChange");
@@ -256,6 +269,34 @@ void Hero::step() {
         cannon_countdown = 0;
 
 
+    laserRegenTimer -= .033;
+    missileRegenTimer -= .033;
+    cannonRegenTimer -= .033;
+
+    if (laserRegenTimer <= 0)
+    {
+        laserRegenTimer = laserRegenDuration;
+        laserCount++;
+        if (SelectedWeapon == Weapon::LaserGun)
+            weapon_vo->setValue(laserCount);
+    }
+    if (missileRegenTimer <= 0)
+    {
+        missileRegenTimer = missileRegenDuration;
+        missileCount++;
+        missileCount++;
+        if (SelectedWeapon == Weapon::HomingMissileLauncher)
+            weapon_vo->setValue(missileCount);
+    }
+    if (cannonRegenTimer <= 0)
+    {
+        cannonRegenTimer = cannonRegenDuration;
+        cannonCount++;
+        if (SelectedWeapon == Weapon::CannonGun)
+            weapon_vo->setValue(cannonCount);
+    }
+
+
     std::vector<Object*> saucerArray;
     // Getting list of all saucers
     for (int i = 0; i < WM.getAllObjects().getCount(); i++)
@@ -267,13 +308,33 @@ void Hero::step() {
         }
     }
 
+    tankStartPosCheck = false;
     if (saucerArray.size() <= 0)
     {
-        //Spawn new saucers         ///TODO SET DIFFICULTY
-        Tank* s1 = new Tank(1,5);
-        Tank* s2 = new Tank(2,7);
-        Tank* s3 = new Tank(3,9);
+        waveNumber++;
+        //Spawn new saucers         
+        ///TODO SET DIFFICULTY
+        Tank* s1 = new Tank(1,rand() % 3 + 4 + waveNumber);
+        Tank* s2 = new Tank(2,rand() % 3 + 4 + waveNumber);
+        Tank* s3 = new Tank(3,rand() % 3 + 4 + waveNumber);
+
+        wave_vo->setValue(waveNumber);
     }
+    // Lock player weapons until saucers are ready
+    else {
+        for (int i = 0; i < saucerArray.size(); i++) {
+            Tank* t = dynamic_cast <Tank*> (saucerArray[i]);
+            if (!t->isInStartPos)
+            {
+                tankStartPosCheck = true;
+                weaponLocked = true;
+            }
+        }
+        if (!tankStartPosCheck)
+            weaponLocked = false;
+    }
+
+
 }
 
 void Hero::fireHomingMissile(df::Vector target) {
@@ -291,7 +352,7 @@ void Hero::fireHomingMissile(df::Vector target) {
     //v.scale(1);
     
     missileCount -= 2;
-    w_vo->setValue(missileCount);
+    weapon_vo->setValue(missileCount);
 
     new HomingMissile(df::Vector(getPosition().getX()+1, getPosition().getY()+2));
     new HomingMissile(df::Vector(getPosition().getX()-1, getPosition().getY()+2));
@@ -313,7 +374,7 @@ void Hero::fireLaser(df::Vector target) {
     laser_countdown = laser_slowdown;
 
     laserCount--;
-    w_vo->setValue(laserCount);
+    weapon_vo->setValue(laserCount);
 
     // Fire Bullet towards target.
   // Compute normalized vector to position, then scale by speed (1).
@@ -339,7 +400,7 @@ void Hero::fireCannon(df::Vector target) {
     cannon_countdown = cannon_slowdown;
 
     cannonCount--;
-    w_vo->setValue(cannonCount);
+    weapon_vo->setValue(cannonCount);
 
     // Fire Bullet towards target.
   // Compute normalized vector to position, then scale by speed (1).
