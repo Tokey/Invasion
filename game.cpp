@@ -19,6 +19,8 @@ void loadResources(void) {
     RM.loadSprite("sprites/ship-spr.txt", "ship");
     RM.loadSprite("sprites/bullet-spr.txt", "bullet");
     RM.loadSprite("sprites/laser-spr.txt", "laser");
+    RM.loadSprite("sprites/tankCannon-spr.txt", "tankCannon");
+    RM.loadSprite("sprites/cannon-spr.txt", "cannon");
     RM.loadSprite("sprites/explosion-spr.txt", "explosion");
     RM.loadSprite("sprites/gameover-spr.txt", "gameover");
     RM.loadSprite("sprites/gamestart-spr.txt", "gamestart");

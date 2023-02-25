@@ -95,7 +95,9 @@ void Tank::hit(const df::EventCollision* p_c) {
 	if ((p_c->getObject1()->getType() == "Bullet") ||
 		(p_c->getObject2()->getType() == "Bullet") || 
 		(p_c->getObject1()->getType() == "Laser") ||
-		(p_c->getObject2()->getType() == "Laser")) {
+		(p_c->getObject2()->getType() == "Laser") ||
+		(p_c->getObject1()->getType() == "Cannon") ||
+		(p_c->getObject2()->getType() == "Cannon")){
 
 		// Create an explosion.
 		Explosion* p_explosion = new Explosion;

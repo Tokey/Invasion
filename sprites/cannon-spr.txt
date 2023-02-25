@@ -3,12 +3,12 @@ frames 2
 width 1
 height 1
 color red
-slowdown 1
+slowdown 2
 </HEADER>
 <BODY>
-!
+o
 end
-|
+O
 end
 </BODY>
 <FOOTER>

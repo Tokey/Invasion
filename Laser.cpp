@@ -18,7 +18,7 @@ Laser::Laser(df::Vector hero_pos)
 
 	// Bullets move 1 space each game loop.
   // The direction is set when the Hero fires.
-	setSpeed(1);
+	setSpeed(1.5);
 }
 
 int Laser::eventHandler(const df::Event* p_e)

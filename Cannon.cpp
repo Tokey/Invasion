@@ -5,7 +5,7 @@
 Cannon::Cannon(df::Vector hero_pos)
 {
 	// Link to "cannon" sprite. //TODO: MUST CHANGE
-	setSprite("laser");
+	setSprite("cannon");
 
 	// Make the Bullets soft so can pass through Hero.
 	setSolidness(df::SOFT);

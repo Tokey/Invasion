@@ -10,6 +10,7 @@
 #include <ResourceManager.h>
 #include "Laser.h"
 #include "Tank.h"
+#include "Cannon.h"
 enum Weapon
 {
     LaserGun,
@@ -86,7 +87,7 @@ Hero::~Hero() {
     df::addParticles(df::SPARKS, getPosition(), 2, df::BLUE);
     df::addParticles(df::SPARKS, getPosition(), 2, df::YELLOW);
     df::addParticles(df::SPARKS, getPosition(), 3, df::RED);
-    df::addParticles(df::SPARKS, getPosition(), 3, df::RED);
+    df::addParticles(df::FIREWORKS, getPosition(), 3, df::RED);
 }
 
 int Hero::eventHandler(const df::Event* p_e) {
@@ -407,7 +408,7 @@ void Hero::fireCannon(df::Vector target) {
     df::Vector v = target - getPosition();
     v.normalize();
     v.scale(1);
-    Laser* p = new Laser(getPosition());
+    Cannon * p = new Cannon(getPosition());
     p->setVelocity(v);
 
     // Play "fire" sound.
