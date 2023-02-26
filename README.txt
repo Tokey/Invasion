@@ -34,6 +34,8 @@ See http://dragonfly.wpi.edu/engine/index.html#setup for details.
 
 2) Run game, as appropriate for the platform (e.g., F5 on Windows from Visual Studio)
 
+3) You can copy dragonfly and SFML libraries in the root folder and run from VS.
+
 
 Platform: Windows VS 20222
 --------------------------------------------------------------------
@@ -67,5 +69,6 @@ Laser (Player weapon shoots a fast projectile directly downwards)
 Cannon (same - Follows the properties of bullet - Saucer Shoot)
 HomingMissile (same - seeks and destroys enemy target. Fires 2 at once)
 Hero (It was modified significantly to support our game mechanics)
+
 
 
