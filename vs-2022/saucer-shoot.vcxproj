@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\AntimatterExplosion.cpp" />
     <ClCompile Include="..\Cannon.cpp" />
     <ClCompile Include="..\ForceField.cpp" />
     <ClCompile Include="..\HomingMissile.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="..\TankCannon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AntimatterExplosion.h" />
     <ClInclude Include="..\Cannon.h" />
     <ClInclude Include="..\ForceField.h" />
     <ClInclude Include="..\HomingMissile.h" />

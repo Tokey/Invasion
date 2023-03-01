@@ -1,0 +1,39 @@
+<HEADER>
+frames 7
+width 3
+height 3
+color yellow
+</HEADER>
+<BODY>
+   
+ . 
+   
+end
+   
+ * 
+   
+end
+ * 
+***
+ * 
+end
+***
+***
+***
+end
+ * 
+***
+ * 
+end
+   
+ * 
+   
+end
+   
+ . 
+   
+end
+</BODY>
+<FOOTER>
+version 1
+</FOOTER>

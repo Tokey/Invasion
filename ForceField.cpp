@@ -1,6 +1,8 @@
 #include "ForceField.h"
 #include "WorldManager.h"
 #include "EventOut.h"
+#include <DisplayManager.h>
+#include "AntimatterExplosion.h"
 
 ForceField::ForceField(df::Vector hero_pos)
 {
@@ -47,8 +49,14 @@ void ForceField::out() {
 void ForceField::hit(const df::EventCollision* p_collision_event) {
 	if ((p_collision_event->getObject1()->getType() == "TankCannon")){
 		WM.markForDelete(p_collision_event->getObject1());
+		DM.shake(30, 20, 2);
+		AntimatterExplosion* p_explosion = new AntimatterExplosion;
+		p_explosion->setPosition(p_collision_event->getObject1()->getPosition());
 	}
 	else if ((p_collision_event->getObject2()->getType() == "TankCannon")) {
 		WM.markForDelete(p_collision_event->getObject2());
+		DM.shake(30, 20, 2);
+		AntimatterExplosion* p_explosion = new AntimatterExplosion;
+		p_explosion->setPosition(p_collision_event->getObject2()->getPosition());
 	}
 }

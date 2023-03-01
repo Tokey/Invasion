@@ -129,6 +129,8 @@ Hero::~Hero() {
     df::addParticles(df::SPARKS, getPosition(), 2, df::YELLOW);
     df::addParticles(df::SPARKS, getPosition(), 3, df::RED);
     df::addParticles(df::SMOKE, getPosition(), 1, df::WHITE);
+
+    WM.markForDelete(forceField);
 }
 
 int Hero::eventHandler(const df::Event* p_e) {
@@ -205,6 +207,7 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
         (p_mouse_event->getMouseButton() == df::Mouse::RIGHT))
     {
+        DM.shake(1, 1, 1);
         if (SelectedWeapon == Weapon::HomingMissileLauncher)
         {
             SelectedWeapon = LaserGun;
@@ -340,7 +343,7 @@ void Hero::step() {
     else {
         forceFieldDuration += .063;
     }
-
+    
     ff_vo->setValue(forceFieldDuration);
 
     if (laserRegenTimer <= 0)
@@ -445,14 +448,15 @@ void Hero::fireHomingMissile(df::Vector target) {
     missileCount -= 2;
     weapon_vo->setValue(missileCount);
 
-    new HomingMissile(df::Vector(getPosition().getX()+1, getPosition().getY()+2));
-    new HomingMissile(df::Vector(getPosition().getX()-1, getPosition().getY()+2));
+    new HomingMissile(df::Vector(getPosition().getX()+3, getPosition().getY()+2));
+    new HomingMissile(df::Vector(getPosition().getX()-7, getPosition().getY()+2));
     //p->setVelocity(v);
 
     // Play "fire" sound.
     df::Sound* p_sound = RM.getSound("fire");
     if (p_sound)
         p_sound->play();
+    DM.shake(20, 30, 3);
 }
 
 void Hero::fireLaser(df::Vector target) {
@@ -479,6 +483,8 @@ void Hero::fireLaser(df::Vector target) {
     df::Sound* p_sound = RM.getSound("fire");
     if (p_sound)
         p_sound->play();
+
+    DM.shake(3, 10, 2);
 }
 
 void Hero::fireCannon(df::Vector target) {
@@ -505,6 +511,8 @@ void Hero::fireCannon(df::Vector target) {
     df::Sound* p_sound = RM.getSound("fire");
     if (p_sound)
         p_sound->play();
+
+    DM.shake(10, 20, 1);
 }
 
 void Hero::nuke()
@@ -526,6 +534,7 @@ void Hero::nuke()
         p_sound->play();
 
     nukeFlashTimer = nukeFlashDuration;
+    DM.shake(30, 30, 25);
 }
 
 void Hero::loadHighScore()
@@ -561,6 +570,7 @@ void Hero::activateForceField()
         forceField->setActive(false);
         return;
     }
+    DM.shake(1, 1, 1);
     forceField->setActive(true);
     forceField->setPosition(getPosition()+df::Vector(0,4));
     forceFieldActivated = true;
