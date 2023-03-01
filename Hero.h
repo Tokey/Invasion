@@ -32,7 +32,7 @@ private:
     int cannon_countdown;
     int cannon_slowdown;
 
-    int nuke_count;
+    int nukeCount;
 
     int waveNumber;
 
@@ -53,6 +53,7 @@ public:
     df::ViewObject* wave_vo = nullptr;
     df::ViewObject* hs_vo = nullptr;
     df::ViewObject* pts_vo = nullptr;
+    df::ViewObject* ff_vo = nullptr;
     ForceField* forceField = nullptr;
 
 
@@ -61,17 +62,19 @@ public:
     int missileCount;
     int cannonCount;
 
-    float forceFieldAmmo;
-
     float laserRegenDuration;
     float missileRegenDuration;
     float cannonRegenDuration;
+    float nukeRegenDuration;
     float nukeFlashDuration;
 
     float laserRegenTimer;
     float missileRegenTimer;
     float cannonRegenTimer;
+    float nukeRegenTimer;
     float nukeFlashTimer;
+    
+    float forceFieldDuration;
 
     bool tankStartPosCheck;
     bool weaponLocked;

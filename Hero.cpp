@@ -47,12 +47,13 @@ Hero::Hero() {
     p_reticle = new Reticle();
     p_reticle->draw();
 
-    nuke_count = 3;
+    nukeCount = 3;
     SelectedWeapon = Weapon::LaserGun;
     
     laserCount = 100;
-    missileCount = 10;
-    cannonCount = 30;
+    missileCount = 20;
+    cannonCount = 50;
+    forceFieldDuration = 100;
 
     waveNumber = 1;
 
@@ -82,14 +83,22 @@ Hero::Hero() {
     pts_vo->setValue(0);
     pts_vo->setColor(df::YELLOW);
 
+    ff_vo = new df::ViewObject; // Points
+    ff_vo->setLocation(df::BOTTOM_LEFT);
+    ff_vo->setViewString("Antimatter Shield");
+    ff_vo->setValue(forceFieldDuration);
+    ff_vo->setColor(df::YELLOW);
+
     
     laserRegenDuration = 1;
     missileRegenDuration = 5;
     cannonRegenDuration = 3;
+    nukeRegenDuration = 60;
 
     laserRegenTimer = laserRegenDuration;
     missileRegenTimer = missileRegenDuration;
     cannonRegenTimer = cannonRegenDuration;
+    nukeRegenTimer = nukeRegenDuration;
 
     weaponLocked = true;
 
@@ -213,8 +222,8 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
         else if (SelectedWeapon == Weapon::CannonGun)
         {
             SelectedWeapon = NuclearWarhead;
-            weapon_vo->setViewString("Nuke");
-            weapon_vo->setValue(nuke_count);
+            weapon_vo->setViewString("Antimatter Bomb");
+            weapon_vo->setValue(nukeCount);
             setSprite("nukeship");
             
         }
@@ -324,6 +333,15 @@ void Hero::step() {
     laserRegenTimer -= .033;
     missileRegenTimer -= .033;
     cannonRegenTimer -= .033;
+    nukeRegenTimer -= .033;
+
+    if (forceFieldActivated && forceFieldDuration > 0)
+        forceFieldDuration -= .63;
+    else {
+        forceFieldDuration += .063;
+    }
+
+    ff_vo->setValue(forceFieldDuration);
 
     if (laserRegenTimer <= 0)
     {
@@ -346,6 +364,13 @@ void Hero::step() {
         cannonCount++;
         if (SelectedWeapon == Weapon::CannonGun)
             weapon_vo->setValue(cannonCount);
+    }
+    if (nukeRegenTimer <= 0)
+    {
+        nukeRegenTimer = nukeRegenDuration;
+        nukeCount++;
+        if (SelectedWeapon == Weapon::NuclearWarhead)
+            weapon_vo->setValue(nukeCount);
     }
 
 
@@ -485,16 +510,15 @@ void Hero::fireCannon(df::Vector target) {
 void Hero::nuke()
 {
     // Check if nukes left.
-    if (!nuke_count)
+    if (!nukeCount)
         return;
-    nuke_count--;
+    nukeCount--;
+
+    weapon_vo->setValue(nukeCount);
+
 
     EventNuke nuke;
     WM.onEvent(&nuke);
-
-    // Send "view" event with nukes to interested ViewObjects.
-    df::EventView ev("Nukes", -1, true);
-    WM.onEvent(&ev);
 
     // Play "nuke" sound.
     df::Sound* p_sound = RM.getSound("nuke");
@@ -532,6 +556,11 @@ void Hero::saveHighScore()
 
 void Hero::activateForceField()
 {
+    if (forceFieldDuration < .3)
+    {
+        forceField->setActive(false);
+        return;
+    }
     forceField->setActive(true);
     forceField->setPosition(getPosition()+df::Vector(0,4));
     forceFieldActivated = true;

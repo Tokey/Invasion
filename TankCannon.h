@@ -11,3 +11,4 @@ public:
     TankCannon(df::Vector hero_pos);
     int eventHandler(const df::Event* p_e) override;
 };
+

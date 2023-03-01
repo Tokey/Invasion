@@ -1,16 +1,18 @@
 #include "TankCannon.h"
 #include "WorldManager.h"
 #include "EventOut.h"
+#include "EventNuke.h"
+#include "Explosion.h"
 
 TankCannon::TankCannon(df::Vector hero_pos)
 {
-	// Link to "bullet" sprite.
-	setSprite("laser");		// TODO, MUST CHANGE THIS
+	// Link to "tankCannon" sprite.
+	setSprite("tankCannon");		// TODO, MUST CHANGE THIS
 
 	// Make the Bullets soft so can pass through Hero.
 	setSolidness(df::SOFT);
 	// Set other object properties.
-	setType("Cannon");
+	setType("TankCannon");
 
 
 	df::Vector p(hero_pos.getX(), hero_pos.getY() - 3);
@@ -18,7 +20,9 @@ TankCannon::TankCannon(df::Vector hero_pos)
 
 	// Bullets move 1 space each game loop.
   // The direction is set when the Hero fires.
-	setSpeed(1);
+	setSpeed(.6);
+
+	registerInterest(NUKE_EVENT);
 }
 
 int TankCannon::eventHandler(const df::Event* p_e)
@@ -32,6 +36,14 @@ int TankCannon::eventHandler(const df::Event* p_e)
 		const df::EventCollision* p_collision_event = dynamic_cast <const df::EventCollision*> (p_e);
 		hit(p_collision_event);
 		return 1;
+	}
+
+	if (p_e->getType() == NUKE_EVENT) {
+		// Create an explosion.
+		Explosion* p_explosion = new Explosion;
+		p_explosion->setPosition(this->getPosition());
+		WM.markForDelete(this);
+		//new Saucer(1);
 	}
 
 	// If get here, have ignored this event.
