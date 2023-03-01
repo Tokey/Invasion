@@ -3,6 +3,8 @@
 #include "EventOut.h"
 #include <DisplayManager.h>
 #include "AntimatterExplosion.h"
+#include <Sound.h>
+#include <ResourceManager.h>
 
 ForceField::ForceField(df::Vector hero_pos)
 {
@@ -52,11 +54,19 @@ void ForceField::hit(const df::EventCollision* p_collision_event) {
 		DM.shake(30, 20, 2);
 		AntimatterExplosion* p_explosion = new AntimatterExplosion;
 		p_explosion->setPosition(p_collision_event->getObject1()->getPosition());
+
+		df::Sound* p_sound = RM.getSound("antimatterExplosion");
+		if (p_sound)
+			p_sound->play();
 	}
 	else if ((p_collision_event->getObject2()->getType() == "TankCannon")) {
 		WM.markForDelete(p_collision_event->getObject2());
 		DM.shake(30, 20, 2);
 		AntimatterExplosion* p_explosion = new AntimatterExplosion;
 		p_explosion->setPosition(p_collision_event->getObject2()->getPosition());
+
+		df::Sound* p_sound = RM.getSound("antimatterExplosion");
+		if (p_sound)
+			p_sound->play();
 	}
 }

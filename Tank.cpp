@@ -12,6 +12,7 @@
 #include "EventView.h"
 #include "EventStep.h"
 #include "Hero.h"
+#include <DisplayManager.h>
 
 
 Tank::Tank(int id, float rof) {
@@ -214,8 +215,10 @@ void Tank::fireTankCannon() {
 		p->setVelocity(v);
 
 		// Play "fire" sound.
-		df::Sound* p_sound = RM.getSound("fire");
+		df::Sound* p_sound = RM.getSound("tankCannon");
 		if (p_sound)
 			p_sound->play();
+
+		DM.shake(5, 30, 2);
 	}
 }

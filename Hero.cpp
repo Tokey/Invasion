@@ -13,6 +13,9 @@
 #include "Cannon.h"
 #include <fstream>
 #include <DisplayManager.h>
+
+df::Sound* p_antimatterShieldSFX = nullptr;
+
 enum Weapon
 {
     LaserGun,
@@ -42,6 +45,8 @@ Hero::Hero() {
 
     cannon_slowdown = 10;
     cannon_countdown = cannon_slowdown;
+
+    p_antimatterShieldSFX = RM.getSound("antimatterShield");
 
    // Create reticle for firing bullets.
     p_reticle = new Reticle();
@@ -85,7 +90,7 @@ Hero::Hero() {
 
     ff_vo = new df::ViewObject; // Points
     ff_vo->setLocation(df::BOTTOM_LEFT);
-    ff_vo->setViewString("Antimatter Shield");
+    ff_vo->setViewString("Force Field");
     ff_vo->setValue(forceFieldDuration);
     ff_vo->setColor(df::YELLOW);
 
@@ -210,32 +215,32 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
         DM.shake(1, 1, 1);
         if (SelectedWeapon == Weapon::HomingMissileLauncher)
         {
-            SelectedWeapon = LaserGun;
-            weapon_vo->setViewString("Laser");
-            weapon_vo->setValue(laserCount);
-            setSprite("lasership");
+            SelectedWeapon = NuclearWarhead;
+            weapon_vo->setViewString("Antimatter Warhead");
+            weapon_vo->setValue(nukeCount);
+            setSprite("nukeship");
         }
         else if (SelectedWeapon == Weapon::LaserGun)
         {
             SelectedWeapon = CannonGun;
-            weapon_vo->setViewString("Cannon");
+            weapon_vo->setViewString("Plasma");
             weapon_vo->setValue(cannonCount);
             setSprite("cannonship");
         }
         else if (SelectedWeapon == Weapon::CannonGun)
         {
-            SelectedWeapon = NuclearWarhead;
-            weapon_vo->setViewString("Antimatter Bomb");
-            weapon_vo->setValue(nukeCount);
-            setSprite("nukeship");
+            SelectedWeapon = HomingMissileLauncher;
+            weapon_vo->setViewString("Widowmaker");
+            weapon_vo->setValue(missileCount);
+            setSprite("missileship");
             
         }
         else if (SelectedWeapon == Weapon::NuclearWarhead)
         {
-            SelectedWeapon = HomingMissileLauncher;
-            weapon_vo->setViewString("Missile");
-            weapon_vo->setValue(missileCount);
-            setSprite("missileship");
+            SelectedWeapon = LaserGun;
+            weapon_vo->setViewString("Laser");
+            weapon_vo->setValue(laserCount);
+            setSprite("lasership");
         }
 
         // Play "Weapon Change" sound.
@@ -453,7 +458,7 @@ void Hero::fireHomingMissile(df::Vector target) {
     //p->setVelocity(v);
 
     // Play "fire" sound.
-    df::Sound* p_sound = RM.getSound("fire");
+    df::Sound* p_sound = RM.getSound("missile");
     if (p_sound)
         p_sound->play();
     DM.shake(20, 30, 3);
@@ -480,7 +485,7 @@ void Hero::fireLaser(df::Vector target) {
     p->setVelocity(v);
     
     // Play "fire" sound.
-    df::Sound* p_sound = RM.getSound("fire");
+    df::Sound* p_sound = RM.getSound("laser");
     if (p_sound)
         p_sound->play();
 
@@ -508,7 +513,7 @@ void Hero::fireCannon(df::Vector target) {
     p->setVelocity(v);
 
     // Play "fire" sound.
-    df::Sound* p_sound = RM.getSound("fire");
+    df::Sound* p_sound = RM.getSound("cannon");
     if (p_sound)
         p_sound->play();
 
@@ -568,8 +573,12 @@ void Hero::activateForceField()
     if (forceFieldDuration < .3)
     {
         forceField->setActive(false);
+        p_antimatterShieldSFX->stop();
         return;
     }
+    if(!forceFieldActivated)
+        p_antimatterShieldSFX->play();
+
     DM.shake(1, 1, 1);
     forceField->setActive(true);
     forceField->setPosition(getPosition()+df::Vector(0,4));
@@ -578,6 +587,7 @@ void Hero::activateForceField()
 
 void Hero::deactivateForceField()
 {
+    p_antimatterShieldSFX->stop();
     forceField->setActive(false);
     forceFieldActivated = false;
 }

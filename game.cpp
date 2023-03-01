@@ -34,6 +34,12 @@ void loadResources(void) {
 
     RM.loadSound("sounds/fire.wav", "fire");
     RM.loadSound("sounds/weaponChange.wav", "weaponChange");
+    RM.loadSound("sounds/tankCannon.wav", "tankCannon");
+    RM.loadSound("sounds/antimatterShield.wav", "antimatterShield");
+    RM.loadSound("sounds/antimatterExplosion.wav", "antimatterExplosion");
+    RM.loadSound("sounds/cannon.wav", "cannon");
+    RM.loadSound("sounds/missile.wav", "missile");
+    RM.loadSound("sounds/laser.wav", "laser");
     RM.loadSound("sounds/explode.wav", "explode");
     RM.loadSound("sounds/nuke.wav", "nuke");
     RM.loadSound("sounds/game-over.wav", "game over");
