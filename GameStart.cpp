@@ -1,7 +1,6 @@
 #include "GameStart.h"
 #include "Hero.h"
 #include "Tank.h"
-#include "Points.h"
 #include "GameManager.h"
 #include "ResourceManager.h"
 
@@ -17,15 +16,6 @@ void GameStart::start()
 	Tank* s1 = new Tank(1,5);
 	Tank* s2 = new Tank(2,5);
 	Tank* s3 = new Tank(3,5);
-
-
-	// Setup heads-up display.
-	new Points;		                     // Points display.
-	df::ViewObject* p_vo = new df::ViewObject; // Count of nukes.
-	p_vo->setLocation(df::TOP_LEFT);
-	p_vo->setViewString("Nukes");
-	p_vo->setValue(3);
-	p_vo->setColor(df::YELLOW);
 
 	// When game starts, become inactive.
 	setActive(false);

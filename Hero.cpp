@@ -11,11 +11,13 @@
 #include "Laser.h"
 #include "Tank.h"
 #include "Cannon.h"
+#include <fstream>
 enum Weapon
 {
     LaserGun,
     HomingMissileLauncher,
-    CannonGun
+    CannonGun,
+    NuclearWarhead
 };
 
 Weapon SelectedWeapon;
@@ -53,6 +55,14 @@ Hero::Hero() {
 
     waveNumber = 1;
 
+    loadHighScore();
+
+    hs_vo = new df::ViewObject; // Count of nukes.
+    hs_vo->setLocation(df::TOP_LEFT);
+    hs_vo->setViewString("High Score");
+    hs_vo->setValue(highscore);
+    hs_vo->setColor(df::YELLOW);
+
     weapon_vo = new df::ViewObject; // Weapons
     weapon_vo->setLocation(df::TOP_CENTER);
     weapon_vo->setValue(laserCount);
@@ -64,6 +74,13 @@ Hero::Hero() {
     wave_vo->setValue(waveNumber);
     wave_vo->setViewString("Wave");
     wave_vo->setColor(df::GREEN);
+
+    pts_vo = new df::ViewObject; // Points
+    pts_vo->setLocation(df::TOP_RIGHT);
+    pts_vo->setViewString("Points");
+    pts_vo->setValue(0);
+    pts_vo->setColor(df::YELLOW);
+
     
     laserRegenDuration = 1;
     missileRegenDuration = 5;
@@ -77,6 +94,9 @@ Hero::Hero() {
 }
 
 Hero::~Hero() {
+
+    saveHighScore();
+
     // Create GameOver object.
     new GameOver;
 
@@ -151,12 +171,14 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
         (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && !weaponLocked)
     {
-        if(SelectedWeapon == Weapon::HomingMissileLauncher)
+        if (SelectedWeapon == Weapon::HomingMissileLauncher)
             fireHomingMissile(p_mouse_event->getMousePosition());
-        else if(SelectedWeapon == Weapon::LaserGun)
+        else if (SelectedWeapon == Weapon::LaserGun)
             fireLaser(p_mouse_event->getMousePosition());
         else if (SelectedWeapon == Weapon::CannonGun)
             fireCannon(p_mouse_event->getMousePosition());
+        else if (SelectedWeapon == Weapon::NuclearWarhead)
+            nuke();
     }
 
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
@@ -176,10 +198,17 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
         }
         else if (SelectedWeapon == Weapon::CannonGun)
         {
+            SelectedWeapon = NuclearWarhead;
+            weapon_vo->setViewString("Nuke");
+            weapon_vo->setValue(nuke_count);
+            
+        }
+        else if (SelectedWeapon == Weapon::NuclearWarhead)
+        {
             SelectedWeapon = HomingMissileLauncher;
             weapon_vo->setViewString("Missile");
             weapon_vo->setValue(missileCount);
-        } 
+        }
 
         // Play "Weapon Change" sound.
         df::Sound* p_sound = RM.getSound("weaponChange");
@@ -221,6 +250,8 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
                 moveFWB(-1.3);
             else if (SelectedWeapon == Weapon::HomingMissileLauncher)
                 moveFWB(-.7);
+            else if (SelectedWeapon == Weapon::NuclearWarhead)
+                moveFWB(-.1);
         }
 
         break;
@@ -234,6 +265,8 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
                 moveFWB(1.3);
             else if (SelectedWeapon == Weapon::HomingMissileLauncher)
                 moveFWB(.7);
+            else if (SelectedWeapon == Weapon::NuclearWarhead)
+                moveFWB(.1);
         }
         break;
 
@@ -334,7 +367,12 @@ void Hero::step() {
         if (!tankStartPosCheck)
             weaponLocked = false;
     }
-
+    
+    if (pts_vo->getValue() > highscore)
+    {
+        highscore = pts_vo->getValue();
+        hs_vo->setValue(highscore);
+    }
 
 }
 
@@ -435,4 +473,30 @@ void Hero::nuke()
     df::Sound* p_sound = RM.getSound("nuke");
     if (p_sound)
         p_sound->play();
+}
+
+void Hero::loadHighScore()
+{
+    FILE* filePointer;
+
+    filePointer = fopen("HighScore.txt", "r");
+    if (filePointer == nullptr)
+    {
+        filePointer = fopen("HighScore.txt", "w");
+        highscore = 0;
+        fprintf(filePointer, "%d", highscore);
+        fclose(filePointer);
+    }
+    else 
+    {
+        fscanf(filePointer, "%d", &highscore);
+    }
+}
+
+void Hero::saveHighScore()
+{
+    FILE* filePointer;
+    filePointer = fopen("HighScore.txt", "w");
+    fprintf(filePointer, "%d", highscore);
+    fclose(filePointer);
 }

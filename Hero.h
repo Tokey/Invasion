@@ -14,6 +14,8 @@ private:
     void move(float dy);
     void moveFWB(float dy);
     void nuke();
+    void loadHighScore();
+    void saveHighScore();
 
     int move_slowdown;
     int move_countdown;
@@ -46,7 +48,11 @@ public:
 
     df::ViewObject* weapon_vo = nullptr;
     df::ViewObject* wave_vo = nullptr;
+    df::ViewObject* hs_vo = nullptr;
+    df::ViewObject* pts_vo = nullptr;
 
+
+    int highscore;
     int laserCount;
     int missileCount;
     int cannonCount;

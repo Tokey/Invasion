@@ -8,7 +8,6 @@
 #include "TankCannon.h"
 #include "Tank.h"
 #include "EventNuke.h"
-#include "Points.h"
 #include "ViewObject.h"
 #include "EventView.h"
 #include "EventStep.h"
@@ -42,8 +41,8 @@ Tank::Tank(int id, float rof) {
 Tank::~Tank()
 {
 	// Send "view" event with points to interested ViewObjects.
-  // Add 10 points.
-	df::EventView ev(POINTS_STRING, 10, true);
+	// Add points.
+	df::EventView ev("Points", 1 * rateOfFire, true);
 	WM.onEvent(&ev);
 }
 

@@ -163,7 +163,6 @@
     <ClCompile Include="..\GameStart.cpp" />
     <ClCompile Include="..\Hero.cpp" />
     <ClCompile Include="..\Laser.cpp" />
-    <ClCompile Include="..\Points.cpp" />
     <ClCompile Include="..\Reticle.cpp" />
     <ClCompile Include="..\Tank.cpp" />
     <ClCompile Include="..\Star.cpp" />
@@ -178,7 +177,6 @@
     <ClInclude Include="..\GameStart.h" />
     <ClInclude Include="..\Hero.h" />
     <ClInclude Include="..\Laser.h" />
-    <ClInclude Include="..\Points.h" />
     <ClInclude Include="..\Reticle.h" />
     <ClInclude Include="..\Tank.h" />
     <ClInclude Include="..\Star.h" />
