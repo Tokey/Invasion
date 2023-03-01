@@ -1,14 +1,26 @@
 <HEADER>
-frames 2
-width 4
-height 1
+frames 4
+width 1
+height 3
 color white
-slowdown 3
+slowdown 2
 </HEADER>
 <BODY>
-:>=-
+*
+|
+V
 end
-~>=-
+o
+!
+V
+end
+O
+|
+V
+end
+@
+|
+V
 end
 </BODY>
 <FOOTER>

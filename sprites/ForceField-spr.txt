@@ -1,0 +1,28 @@
+<HEADER>
+frames 4
+width 25
+height 3
+color green
+slowdown 2
+</HEADER>
+<BODY>
+oOoOo               oOoOo
+     xOoOo     oOoOx     
+          oOoOo          
+end
+OoOoO               OoOoO
+     oOoO.     .OoOo     
+          OoOoO          
+end
+0.0.0               0o0o0
+     .0.0.     .0.0.     
+          0.0.0          
+end
+x0x0x               x0x0x
+     0x0x0     0x0x0     
+          x0x0x          
+end
+</BODY>
+<FOOTER>
+version 1
+</FOOTER>

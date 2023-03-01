@@ -4,6 +4,7 @@
 #include "EventMouse.h"
 #include "Reticle.h"
 #include <ViewObject.h>
+#include "ForceField.h"
 
 class Hero : public df::Object {
 
@@ -16,6 +17,8 @@ private:
     void nuke();
     void loadHighScore();
     void saveHighScore();
+    void activateForceField();
+    void deactivateForceField();
 
     int move_slowdown;
     int move_countdown;
@@ -50,6 +53,7 @@ public:
     df::ViewObject* wave_vo = nullptr;
     df::ViewObject* hs_vo = nullptr;
     df::ViewObject* pts_vo = nullptr;
+    ForceField* forceField = nullptr;
 
 
     int highscore;
@@ -57,14 +61,20 @@ public:
     int missileCount;
     int cannonCount;
 
+    float forceFieldAmmo;
+
     float laserRegenDuration;
     float missileRegenDuration;
     float cannonRegenDuration;
+    float nukeFlashDuration;
 
     float laserRegenTimer;
     float missileRegenTimer;
     float cannonRegenTimer;
+    float nukeFlashTimer;
 
     bool tankStartPosCheck;
     bool weaponLocked;
+
+    bool forceFieldActivated;
 };

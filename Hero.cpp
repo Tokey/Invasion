@@ -12,6 +12,7 @@
 #include "Tank.h"
 #include "Cannon.h"
 #include <fstream>
+#include <DisplayManager.h>
 enum Weapon
 {
     LaserGun,
@@ -22,7 +23,7 @@ enum Weapon
 
 Weapon SelectedWeapon;
 Hero::Hero() {
-	setSprite("ship");
+	setSprite("lasership");
 	registerInterest(df::KEYBOARD_EVENT);
     registerInterest(df::MSE_EVENT);
     registerInterest(df::STEP_EVENT);
@@ -91,6 +92,17 @@ Hero::Hero() {
     cannonRegenTimer = cannonRegenDuration;
 
     weaponLocked = true;
+
+    df::Vector v = df::Vector(getPosition().getX(), getPosition().getY() + 5) - getPosition();
+    v.normalize();
+    v.scale(1);
+    forceField = new ForceField(getPosition());
+    forceField->setActive(false);
+
+    forceFieldActivated = false;
+
+    nukeFlashTimer = 0;
+    nukeFlashDuration = 0.5;
 }
 
 Hero::~Hero() {
@@ -104,10 +116,10 @@ Hero::~Hero() {
     WM.markForDelete(p_reticle);
 
     // Make a big explosion with particles.
-    df::addParticles(df::SPARKS, getPosition(), 2, df::BLUE);
+    df::addParticles(df::SPARKS, getPosition(), 2, df::WHITE);
     df::addParticles(df::SPARKS, getPosition(), 2, df::YELLOW);
     df::addParticles(df::SPARKS, getPosition(), 3, df::RED);
-    df::addParticles(df::FIREWORKS, getPosition(), 3, df::RED);
+    df::addParticles(df::SMOKE, getPosition(), 1, df::WHITE);
 }
 
 int Hero::eventHandler(const df::Event* p_e) {
@@ -169,7 +181,7 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
 
   // Pressed button?
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
-        (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && !weaponLocked)
+        (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && !weaponLocked && !forceFieldActivated)
     {
         if (SelectedWeapon == Weapon::HomingMissileLauncher)
             fireHomingMissile(p_mouse_event->getMousePosition());
@@ -189,18 +201,21 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
             SelectedWeapon = LaserGun;
             weapon_vo->setViewString("Laser");
             weapon_vo->setValue(laserCount);
+            setSprite("lasership");
         }
         else if (SelectedWeapon == Weapon::LaserGun)
         {
             SelectedWeapon = CannonGun;
             weapon_vo->setViewString("Cannon");
             weapon_vo->setValue(cannonCount);
+            setSprite("cannonship");
         }
         else if (SelectedWeapon == Weapon::CannonGun)
         {
             SelectedWeapon = NuclearWarhead;
             weapon_vo->setViewString("Nuke");
             weapon_vo->setValue(nuke_count);
+            setSprite("nukeship");
             
         }
         else if (SelectedWeapon == Weapon::NuclearWarhead)
@@ -208,6 +223,7 @@ void Hero::mouse(const df::EventMouse *p_mouse_event) {
             SelectedWeapon = HomingMissileLauncher;
             weapon_vo->setViewString("Missile");
             weapon_vo->setValue(missileCount);
+            setSprite("missileship");
         }
 
         // Play "Weapon Change" sound.
@@ -271,8 +287,10 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
         break;
 
     case df::Keyboard::SPACE:
-        if (p_keyboard_event->getKeyboardAction() == df::KEY_PRESSED)
-            nuke();
+        if (p_keyboard_event->getKeyboardAction() == df::KEY_DOWN)
+            activateForceField();
+        else if (p_keyboard_event->getKeyboardAction() == df::KEY_RELEASED)
+            deactivateForceField();
         break;
     
     }
@@ -374,6 +392,15 @@ void Hero::step() {
         hs_vo->setValue(highscore);
     }
 
+    if (nukeFlashTimer >= 0)
+    {
+        DM.setBackgroundColor(df::WHITE);
+        nukeFlashTimer -= .053;
+    }
+    else {
+        DM.setBackgroundColor(df::BLACK);
+    }
+
 }
 
 void Hero::fireHomingMissile(df::Vector target) {
@@ -473,6 +500,8 @@ void Hero::nuke()
     df::Sound* p_sound = RM.getSound("nuke");
     if (p_sound)
         p_sound->play();
+
+    nukeFlashTimer = nukeFlashDuration;
 }
 
 void Hero::loadHighScore()
@@ -499,4 +528,17 @@ void Hero::saveHighScore()
     filePointer = fopen("HighScore.txt", "w");
     fprintf(filePointer, "%d", highscore);
     fclose(filePointer);
+}
+
+void Hero::activateForceField()
+{
+    forceField->setActive(true);
+    forceField->setPosition(getPosition()+df::Vector(0,4));
+    forceFieldActivated = true;
+}
+
+void Hero::deactivateForceField()
+{
+    forceField->setActive(false);
+    forceFieldActivated = false;
 }

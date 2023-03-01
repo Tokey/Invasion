@@ -209,7 +209,7 @@ void Tank::fireTankCannon() {
 	{
 		df::Vector v = df::Vector(hero->getPosition()) - getPosition();
 		v.normalize();
-		v.scale(1);
+		v.scale(0.05 * rateOfFire);
 		TankCannon* p = new TankCannon(getPosition());
 		p->setVelocity(v);
 
