@@ -41,7 +41,7 @@ Hero::Hero() {
     move_slowdown = 0.02;
     move_countdown = move_slowdown;
 
-    missile_slowdown = 30;
+    missile_slowdown = 50;
     missile_countdown = missile_slowdown;
 
     laser_slowdown = 4;
@@ -100,7 +100,7 @@ Hero::Hero() {
 
     
     laserRegenDuration = 1;
-    missileRegenDuration = 5;
+    missileRegenDuration = 7;
     cannonRegenDuration = 3;
     nukeRegenDuration = 60;
 
@@ -319,13 +319,13 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
 
         {
             if (SelectedWeapon == Weapon::LaserGun)
-                moveFWB(-2);
+                moveFWB(-2.1);
             else if (SelectedWeapon == Weapon::CannonGun)
-                moveFWB(-1.3);
+                moveFWB(-1.4);
             else if (SelectedWeapon == Weapon::HomingMissileLauncher)
-                moveFWB(-.7);
+                moveFWB(-.8);
             else if (SelectedWeapon == Weapon::NuclearWarhead)
-                moveFWB(-.1);
+                moveFWB(-.2);
         }
 
         break;
@@ -334,13 +334,13 @@ void Hero::kbd(const df::EventKeyboard* p_keyboard_event) {
         if (p_keyboard_event->getKeyboardAction() == df::KEY_DOWN)
         {
             if (SelectedWeapon == Weapon::LaserGun)
-                moveFWB(2);
+                moveFWB(2.1);
             else if (SelectedWeapon == Weapon::CannonGun)
-                moveFWB(1.3);
+                moveFWB(1.4);
             else if (SelectedWeapon == Weapon::HomingMissileLauncher)
-                moveFWB(.7);
+                moveFWB(.8);
             else if (SelectedWeapon == Weapon::NuclearWarhead)
-                moveFWB(.1);
+                moveFWB(.2);
         }
         break;
 
