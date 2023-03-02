@@ -3,6 +3,7 @@
 #include "WorldManager.h"
 #include "EventOut.h"
 #include "EventStep.h"
+#include "Tank.h"
 
 HomingMissile::HomingMissile(df::Vector hero_pos)
 {
@@ -99,7 +100,8 @@ void HomingMissile::step() {
 	int idx = rand() % saucerArray.size();
 	Object* p_o = saucerArray[idx];
 	lockedObject = p_o;
-	lockedObject->setSprite("lockedSaucer");
+	Tank* lt = dynamic_cast <Tank*> (lockedObject);
+	lt->isLocked = true;
 	targetLocked = true;
 	df::Vector v = p_o->getPosition() - getPosition();
 	v.normalize();

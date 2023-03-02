@@ -1,0 +1,22 @@
+<HEADER>
+frames 2
+width 13
+height 4
+color red
+transparency #
+</HEADER>
+<BODY>
+######//#####
+####.//.#####
+#.-='=='==-.#
+(O_o_o_o_o_O)
+end
+######//#####
+####.//.#####
+#.-='--'==-.#
+(O_o_o_o_o_O)
+end
+</BODY>
+<FOOTER>
+version 1
+</FOOTER>

@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\AntimatterExplosion.cpp" />
+    <ClCompile Include="..\Background.cpp" />
     <ClCompile Include="..\Cannon.cpp" />
     <ClCompile Include="..\ForceField.cpp" />
     <ClCompile Include="..\HomingMissile.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="..\GameStart.cpp" />
     <ClCompile Include="..\Hero.cpp" />
     <ClCompile Include="..\Laser.cpp" />
+    <ClCompile Include="..\Moon.cpp" />
     <ClCompile Include="..\Reticle.cpp" />
     <ClCompile Include="..\Tank.cpp" />
     <ClCompile Include="..\Star.cpp" />
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AntimatterExplosion.h" />
+    <ClInclude Include="..\Background.h" />
     <ClInclude Include="..\Cannon.h" />
     <ClInclude Include="..\ForceField.h" />
     <ClInclude Include="..\HomingMissile.h" />
@@ -180,6 +183,7 @@
     <ClInclude Include="..\GameStart.h" />
     <ClInclude Include="..\Hero.h" />
     <ClInclude Include="..\Laser.h" />
+    <ClInclude Include="..\Moon.h" />
     <ClInclude Include="..\Reticle.h" />
     <ClInclude Include="..\Tank.h" />
     <ClInclude Include="..\Star.h" />

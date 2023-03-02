@@ -25,12 +25,20 @@ void loadResources(void) {
     RM.loadSprite("sprites/antimatterExplosion-spr.txt", "antimatterexplosion");
     RM.loadSprite("sprites/bullet-spr.txt", "bullet");
     RM.loadSprite("sprites/laser-spr.txt", "laser");
+    RM.loadSprite("sprites/Tank-Left-spr.txt", "tankleft");
+    RM.loadSprite("sprites/Tank-Right-spr.txt", "tankright");
+    RM.loadSprite("sprites/Tank-Up-spr.txt", "tankup");
+    RM.loadSprite("sprites/Tank-Left-Locked-spr.txt", "tankleftlocked");
+    RM.loadSprite("sprites/Tank-Right-Locked-spr.txt", "tankrightlocked");
+    RM.loadSprite("sprites/Tank-Up-Locked-spr.txt", "tankuplocked");
     RM.loadSprite("sprites/tankCannon-spr.txt", "tankCannon");
     RM.loadSprite("sprites/cannon-spr.txt", "cannon");
     RM.loadSprite("sprites/explosion-spr.txt", "explosion");
     RM.loadSprite("sprites/gameover-spr.txt", "gameover");
     RM.loadSprite("sprites/gamestart-spr.txt", "gamestart");
     RM.loadSprite("sprites/lockedSaucer-spr.txt", "lockedSaucer");
+    RM.loadSprite("sprites/background-spr.txt", "background");
+    RM.loadSprite("sprites/Moon-spr.txt", "moon");
 
     RM.loadSound("sounds/fire.wav", "fire");
     RM.loadSound("sounds/weaponChange.wav", "weaponChange");
@@ -42,9 +50,12 @@ void loadResources(void) {
     RM.loadSound("sounds/laser.wav", "laser");
     RM.loadSound("sounds/explode.wav", "explode");
     RM.loadSound("sounds/nuke.wav", "nuke");
+    RM.loadSound("sounds/nukeMore.wav", "nukeMore");
+    RM.loadSound("sounds/ammocollision.wav", "ammocollision");
     RM.loadSound("sounds/game-over.wav", "game over");
 
-    RM.loadMusic("sounds/start-music.wav", "start music");
+
+    RM.loadMusic("sounds/EpicMusic.wav", "start music");
     
 }
 

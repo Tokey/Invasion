@@ -11,10 +11,14 @@
 #include "Laser.h"
 #include "Tank.h"
 #include "Cannon.h"
+#include "Background.h"
 #include <fstream>
 #include <DisplayManager.h>
+#include "Moon.h"
 
 df::Sound* p_antimatterShieldSFX = nullptr;
+Background* BG = nullptr;
+Moon* moon = nullptr;
 
 enum Weapon
 {
@@ -77,7 +81,7 @@ Hero::Hero() {
     weapon_vo->setColor(df::WHITE);
 
     wave_vo = new df::ViewObject; // Wave
-    wave_vo->setLocation(df::BOTTOM_CENTER);
+    wave_vo->setLocation(df::BOTTOM_RIGHT);
     wave_vo->setValue(waveNumber);
     wave_vo->setViewString("Wave");
     wave_vo->setColor(df::GREEN);
@@ -117,6 +121,12 @@ Hero::Hero() {
 
     nukeFlashTimer = 0;
     nukeFlashDuration = 0.5;
+
+   BG = new Background();
+   BG->setPosition(df::Vector(80, 32));
+
+   moon = new Moon();
+   moon->setPosition(df::Vector(120, 16));
 }
 
 Hero::~Hero() {
@@ -136,6 +146,23 @@ Hero::~Hero() {
     df::addParticles(df::SMOKE, getPosition(), 1, df::WHITE);
 
     WM.markForDelete(forceField);
+    WM.markForDelete(BG);
+    WM.markForDelete(moon);
+
+    std::vector<Object*> saucerArray;
+    // Getting list of all saucers
+    for (int i = 0; i < WM.getAllObjects().getCount(); i++)
+    {
+        Object* p_o = WM.getAllObjects()[i];
+        if (p_o->getType() == "Saucer")
+        {
+            saucerArray.push_back(p_o);
+        }
+    }
+
+    for (int i = 0; i < saucerArray.size(); i++) {
+        WM.markForDelete(saucerArray[i]);
+    }
 }
 
 int Hero::eventHandler(const df::Event* p_e) {
@@ -537,6 +564,10 @@ void Hero::nuke()
     df::Sound* p_sound = RM.getSound("nuke");
     if (p_sound)
         p_sound->play();
+
+    df::Sound* p_sound2 = RM.getSound("nukeMore");
+    if (p_sound2)
+        p_sound2->play();
 
     nukeFlashTimer = nukeFlashDuration;
     DM.shake(30, 30, 25);

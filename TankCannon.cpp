@@ -3,6 +3,9 @@
 #include "EventOut.h"
 #include "EventNuke.h"
 #include "Explosion.h"
+#include <Sound.h>
+#include <ResourceManager.h>
+#include <utility.h>
 
 TankCannon::TankCannon(df::Vector hero_pos)
 {
@@ -59,19 +62,54 @@ void TankCannon::out() {
 void TankCannon::hit(const df::EventCollision* p_collision_event) {
 	if ((p_collision_event->getObject1()->getType() == "Hero") ||
 		(p_collision_event->getObject2()->getType() == "Hero")) {
+
+		df::addParticles(df::SPARKS, getPosition(), 2, df::CYAN);
+
 		WM.markForDelete(p_collision_event->getObject1());
 		WM.markForDelete(p_collision_event->getObject2());
+
+		df::Sound* p_sound = RM.getSound("ammocollision");
+		if (p_sound)
+			p_sound->play();
+
+		
 	}
 
 	if ((p_collision_event->getObject1()->getType() == "Bullet") ||
 		(p_collision_event->getObject2()->getType() == "Bullet")) {
+
+		df::addParticles(df::SPARKS, getPosition(), 2, df::CYAN);
+
 		WM.markForDelete(p_collision_event->getObject1());
 		WM.markForDelete(p_collision_event->getObject2());
+
+		df::Sound* p_sound = RM.getSound("ammocollision");
+		if (p_sound)
+			p_sound->play();
 	}
 
 	if ((p_collision_event->getObject1()->getType() == "Laser") ||
 		(p_collision_event->getObject2()->getType() == "Laser")) {
+
+		df::addParticles(df::SPARKS, getPosition(), 2, df::CYAN);
+
 		WM.markForDelete(p_collision_event->getObject1());
 		WM.markForDelete(p_collision_event->getObject2());
+
+		df::Sound* p_sound = RM.getSound("ammocollision");
+		if (p_sound)
+			p_sound->play();
+	}
+	if ((p_collision_event->getObject1()->getType() == "Cannon") ||
+		(p_collision_event->getObject2()->getType() == "Cannon")) {
+
+		df::addParticles(df::SPARKS, getPosition(), 2, df::CYAN);
+
+		WM.markForDelete(p_collision_event->getObject1());
+		WM.markForDelete(p_collision_event->getObject2());
+
+		df::Sound* p_sound = RM.getSound("ammocollision");
+		if (p_sound)
+			p_sound->play();
 	}
 }

@@ -23,5 +23,7 @@ public:
 
     float rateOfFire;
     float weaponCooldown;
+
+    bool isLocked;
 };
 

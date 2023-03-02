@@ -13,14 +13,16 @@
 #include "EventStep.h"
 #include "Hero.h"
 #include <DisplayManager.h>
+#include<stdio.h>
 
+//df::ViewObject * ff_vo = nullptr;
 
 Tank::Tank(int id, float rof) {
 
 	tankID = id;
 
 	// Setup "saucer" sprite.
-	setSprite("saucer");
+	setSprite("tankleft");
 	// Set object type.
 	setType("Saucer");
 
@@ -37,12 +39,27 @@ Tank::Tank(int id, float rof) {
 	 sinPol = true;
 	 rateOfFire = rof; //Rounds per minute
 	 weaponCooldown =  0;
+
+	 //if (tankID == 2)
+	 //{
+		// ff_vo = new df::ViewObject; // Points
+		// ff_vo->setLocation(df::BOTTOM_RIGHT);
+		// ff_vo->setViewString("ANGLE ");
+
+		// ff_vo->setColor(df::YELLOW);
+	 //}
+
+	 isLocked = false;
 }
 
 Tank::~Tank()
 {
 	// Send "view" event with points to interested ViewObjects.
 	// Add points.
+
+	df::addParticles(df::SPARKS, getPosition(), 2, df::GREEN);
+	df::addParticles(df::SMOKE, getPosition(), 2, df::WHITE);
+
 	df::EventView ev("Points", 1 * rateOfFire, true);
 	WM.onEvent(&ev);
 }
@@ -139,7 +156,7 @@ void Tank::moveToStart() {
 
 
 	// y is in vertical range
-	temp_pos.setY(43); // Altitude of the tanks
+	temp_pos.setY(40); // Altitude of the tanks
 
 	// If collision, move right slightly until empty space.
 	df::ObjectList collision_list = WM.getCollisions(this, temp_pos);
@@ -185,6 +202,53 @@ void Tank::step() {
 		}
 
 	}
+
+	Object* hero = nullptr;
+	for (int i = 0; i < WM.getAllObjects().getCount(); i++)
+	{
+		Object* p_o = WM.getAllObjects()[i];
+		if (p_o->getType() == "Hero")
+		{
+			hero = p_o;
+			break;
+		}
+	}
+
+	// If hero found
+	if (hero != nullptr)
+	{
+		float dot = (getPosition().getX()-80) * (hero->getPosition().getX() - 80) + getPosition().getY() * hero->getPosition().getY();
+	    float det = (getPosition().getX()-80) * hero->getPosition().getY() - getPosition().getY() * (hero->getPosition().getX()-80);
+		float anglerad = atan2(det, dot);
+		float angle = anglerad * (180 / 3.1416);
+		
+		if (angle >= -50 && angle <= 50)
+		{
+			if(!isLocked)
+			setSprite("tankup");
+			else
+				setSprite("tankuplocked");
+		}
+		else if (angle < -50)
+		{
+			if (!isLocked)
+			setSprite("tankright");
+			else
+			setSprite("tankrightlocked");
+		}
+		else if (angle > 50)
+		{
+			if (!isLocked)
+			setSprite("tankleft");
+			else
+				setSprite("tankleftlocked");
+		}
+
+		/*LM.writeLog(std::to_string(angle).c_str());
+
+		if(tankID == 2)
+		ff_vo->setValue(angle);*/
+	}
 	
 }
 
@@ -202,6 +266,7 @@ void Tank::fireTankCannon() {
 		if (p_o->getType() == "Hero")
 		{
 			hero = p_o;
+			break;
 		}
 	}
 

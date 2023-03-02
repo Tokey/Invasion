@@ -1,16 +1,18 @@
 <HEADER>
 frames 2
-width 1
-height 2
-color red
+width 2
+height 3
+color magenta
 slowdown 3
 </HEADER>
 <BODY>
-O
-^
+/\
+''
+^^
 end
-0
-:
+/\
+..
+::
 end
 </BODY>
 <FOOTER>

@@ -3,7 +3,7 @@ frames 2
 width 83
 height 10
 color yellow
-slowdown 15
+slowdown 20
 </HEADER>
 <BODY>
                                                                                    
@@ -13,9 +13,9 @@ slowdown 15
    _|    _|    _|_|    _|  _|    _|    _|        _|    _|    _|    _|  _|    _|_|  
  _|_|_|  _|      _|      _|      _|    _|  _|_|_|    _|_|_|    _|_|    _|      _|  
                                                                                    
-          Controls: 'a'/'d' moves, Mouse Left fires, Space nukes                   
+       Controls: 'a'/'d' moves, Mouse Left fires, Space activates Forcefield       
                                                                                    
-                    Press 'p' to play, 'q' to quit                                 
+                          Press 'p' to play, 'q' to quit                           
 end
                                                                                    
  _|_|_|  _|      _|  _|      _|    _|_|      _|_|_|  _|_|_|    _|_|    _|      _|  
@@ -24,7 +24,7 @@ end
    _|    _|    _|_|    _|  _|    _|    _|        _|    _|    _|    _|  _|    _|_|  
  _|_|_|  _|      _|      _|      _|    _|  _|_|_|    _|_|_|    _|_|    _|      _|  
                                                                                    
-        Controls: 'a'/'d' moves, Mouse Right Changes Weapon, 'q' quits             
+  Controls: 'a'/'d' moves, Mouse Right Changes Weapon, Space activates Forcefield  
                                                                                    
                                                                                    
 end

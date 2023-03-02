@@ -1,7 +1,7 @@
 
 #include "Object.h"
 #include "EventMouse.h"
-#define RETICLE_CHAR '+'
+#define RETICLE_CHAR "(+)"
 
 class Reticle : public df::Object {
 
