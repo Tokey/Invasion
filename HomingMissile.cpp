@@ -4,6 +4,7 @@
 #include "EventOut.h"
 #include "EventStep.h"
 #include "Tank.h"
+#include <utility.h>
 
 HomingMissile::HomingMissile(df::Vector hero_pos)
 {
@@ -69,20 +70,31 @@ void HomingMissile::hit(const df::EventCollision* p_collision_event) {
 
 void HomingMissile::step() {
 
+	if (this->getPosition().getY() >= 40)
+	{
+		df::addParticles(df::SMOKE, getPosition(), 1, df::BLUE);
+		WM.markForDelete(this);
+	}
 	if (targetLocked) // Checks if bullet has locked on or not
 	{
-		if (lockedObject->getPosition().getX() <= 0 && lockedObject->getPosition().getY() <= 0)
+		if (lockedObject->getPosition().getY() != 40)
 		{
+
+			WM.markForDelete(this);
 			targetLocked = false; // If the locked object gets destroyed, then a new target will be assigned
 
 			while (!saucerArray.empty())
 				saucerArray.pop_back();
+			saucerArray.clear();
 		}
 		
-		df::Vector v = lockedObject->getPosition() - getPosition();
-		v.normalize();
-		v.scale(1);
-		this->setVelocity(v);
+		if (targetLocked)
+		{
+			df::Vector v = lockedObject->getPosition() - getPosition();
+			v.normalize();
+			v.scale(1);
+			this->setVelocity(v);
+		}
 		return;
 	}
 
@@ -100,13 +112,12 @@ void HomingMissile::step() {
 	int idx = rand() % saucerArray.size();
 	Object* p_o = saucerArray[idx];
 	lockedObject = p_o;
-	Tank* lt = dynamic_cast <Tank*> (lockedObject);
-	lt->isLocked = true;
-	targetLocked = true;
-	df::Vector v = p_o->getPosition() - getPosition();
-	v.normalize();
-	v.scale(1);
-	this->setVelocity(v);
+	if (dynamic_cast <Tank*> (lockedObject))
+	{
+		Tank* lt = dynamic_cast <Tank*> (lockedObject);
+		lt->isLocked = true;
+		targetLocked = true;
+	}
 
 }
 

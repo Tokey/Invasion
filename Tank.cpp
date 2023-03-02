@@ -50,6 +50,7 @@ Tank::Tank(int id, float rof) {
 	 //}
 
 	 isLocked = false;
+	 isTankAlive = true;
 }
 
 Tank::~Tank()
@@ -67,11 +68,6 @@ Tank::~Tank()
 }
 
 int Tank::eventHandler(const df::Event* p_e) {
-
-	if (p_e->getType() == df::OUT_EVENT) {
-		out();
-		return 1;
-	}
 
 	if (p_e->getType() == df::STEP_EVENT) {
 		step();
@@ -96,14 +92,6 @@ int Tank::eventHandler(const df::Event* p_e) {
 	return 0;
 }
 
-void Tank::out()  {
-	if (getPosition().getX() >= 0 && getPosition().getY() >=0 && getPosition().getY() <= WM.getBoundary().getVertical())
-		return;
-	//moveToStart(); 
-	// Spawn new Saucer to make the game get harder.
-	//new Saucer(1);
-}
-
 void Tank::hit(const df::EventCollision* p_c) {
 	// If Saucer on Saucer, ignore.
 	if ((p_c->getObject1()->getType() == "Saucer") &&
@@ -118,6 +106,7 @@ void Tank::hit(const df::EventCollision* p_c) {
 		(p_c->getObject1()->getType() == "Cannon") ||
 		(p_c->getObject2()->getType() == "Cannon")){
 
+		isTankAlive = false;
 		DM.shake(33, 22, 2);
 		// Create an explosion.
 		Explosion* p_explosion = new Explosion;
@@ -159,6 +148,7 @@ void Tank::moveToStart() {
 
 
 	// y is in vertical range
+	//Y POS
 	temp_pos.setY(40); // Altitude of the tanks
 
 	// If collision, move right slightly until empty space.

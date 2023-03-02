@@ -25,5 +25,6 @@ public:
     float weaponCooldown;
 
     bool isLocked;
+    bool isTankAlive;
 };
 
