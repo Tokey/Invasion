@@ -1,26 +1,26 @@
 <HEADER>
 frames 4
-width 1
+width 2
 height 3
-color white
+color cyan
 slowdown 2
 </HEADER>
 <BODY>
-*
-|
-V
+@@
+..
+\/
 end
-o
-!
-V
+oo
+!!
+\/
 end
-O
-|
-V
+OO
+::
+\/
 end
-@
-|
-V
+**
+||
+\/
 end
 </BODY>
 <FOOTER>

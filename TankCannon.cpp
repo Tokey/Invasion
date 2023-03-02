@@ -6,6 +6,7 @@
 #include <Sound.h>
 #include <ResourceManager.h>
 #include <utility.h>
+#include <DisplayManager.h>
 
 TankCannon::TankCannon(df::Vector hero_pos)
 {
@@ -71,8 +72,7 @@ void TankCannon::hit(const df::EventCollision* p_collision_event) {
 		df::Sound* p_sound = RM.getSound("ammocollision");
 		if (p_sound)
 			p_sound->play();
-
-		
+		DM.shake(5, 5, 2);
 	}
 
 	if ((p_collision_event->getObject1()->getType() == "Bullet") ||
@@ -86,6 +86,7 @@ void TankCannon::hit(const df::EventCollision* p_collision_event) {
 		df::Sound* p_sound = RM.getSound("ammocollision");
 		if (p_sound)
 			p_sound->play();
+		DM.shake(5, 5, 2);
 	}
 
 	if ((p_collision_event->getObject1()->getType() == "Laser") ||
@@ -99,6 +100,7 @@ void TankCannon::hit(const df::EventCollision* p_collision_event) {
 		df::Sound* p_sound = RM.getSound("ammocollision");
 		if (p_sound)
 			p_sound->play();
+		DM.shake(5, 5, 2);
 	}
 	if ((p_collision_event->getObject1()->getType() == "Cannon") ||
 		(p_collision_event->getObject2()->getType() == "Cannon")) {
@@ -111,5 +113,6 @@ void TankCannon::hit(const df::EventCollision* p_collision_event) {
 		df::Sound* p_sound = RM.getSound("ammocollision");
 		if (p_sound)
 			p_sound->play();
+		DM.shake(5, 5, 2);
 	}
 }

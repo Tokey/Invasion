@@ -10,6 +10,9 @@ private:
 public:
     GameStart();
     void playMusic();
+    void viewHighScore();
     int eventHandler(const df::Event* p_e) override;
     int draw() override;
+
+    df::ViewObject* hs_vo = nullptr;
 };

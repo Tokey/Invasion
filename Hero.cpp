@@ -41,13 +41,13 @@ Hero::Hero() {
     move_slowdown = 0.02;
     move_countdown = move_slowdown;
 
-    missile_slowdown = 35;
+    missile_slowdown = 30;
     missile_countdown = missile_slowdown;
 
-    laser_slowdown = 5;
+    laser_slowdown = 4;
     laser_countdown = laser_slowdown;
 
-    cannon_slowdown = 10;
+    cannon_slowdown = 8;
     cannon_countdown = cannon_slowdown;
 
     p_antimatterShieldSFX = RM.getSound("antimatterShield");
@@ -163,6 +163,12 @@ Hero::~Hero() {
     for (int i = 0; i < saucerArray.size(); i++) {
         WM.markForDelete(saucerArray[i]);
     }
+
+    df::Sound* p_sound2 = RM.getSound("nukeMore");
+    if (p_sound2)
+        p_sound2->play();
+
+    DM.shake(90, 90, 30);
 }
 
 int Hero::eventHandler(const df::Event* p_e) {
@@ -185,6 +191,8 @@ int Hero::eventHandler(const df::Event* p_e) {
         return 1;
     
     }
+
+
 
     return 0;
 }
@@ -222,6 +230,12 @@ void Hero::moveFWB(float dx) {
 // Take appropriate action according to mouse action.
 void Hero::mouse(const df::EventMouse *p_mouse_event) {
 
+    if ((p_mouse_event->getMouseAction() == df::CLICKED) && (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && (weaponLocked || forceFieldActivated))
+    {
+        df::Sound* p_sound2 = RM.getSound("noammo");
+        if (p_sound2)
+            p_sound2->play();
+    }
   // Pressed button?
     if ((p_mouse_event->getMouseAction() == df::CLICKED) &&
         (p_mouse_event->getMouseButton() == df::Mouse::LEFT) && !weaponLocked && !forceFieldActivated)
@@ -465,7 +479,12 @@ void Hero::step() {
 
 void Hero::fireHomingMissile(df::Vector target) {
     if (missileCount <= 0) // TODO ADD NO BULLET SOUND HERE
+    {
+        df::Sound* p_sound2 = RM.getSound("noammo");
+        if (p_sound2)
+            p_sound2->play();
         return;
+    }
 
     if (missile_countdown > 0)
         return;
@@ -494,7 +513,12 @@ void Hero::fireHomingMissile(df::Vector target) {
 void Hero::fireLaser(df::Vector target) {
 
     if (laserCount <= 0) // TODO ADD NO BULLET SOUND HERE
+    {
+        df::Sound* p_sound2 = RM.getSound("noammo");
+        if (p_sound2)
+            p_sound2->play();
         return;
+    }
 
     if (laser_countdown > 0)
         return;
@@ -522,7 +546,12 @@ void Hero::fireLaser(df::Vector target) {
 void Hero::fireCannon(df::Vector target) {
 
     if (cannonCount <= 0) // TODO ADD NO BULLET SOUND HERE
+    {
+        df::Sound* p_sound2 = RM.getSound("noammo");
+        if (p_sound2)
+            p_sound2->play();
         return;
+    }
 
     if (cannon_countdown > 0)
         return;
@@ -551,7 +580,12 @@ void Hero::nuke()
 {
     // Check if nukes left.
     if (!nukeCount)
+    {
+        df::Sound* p_sound2 = RM.getSound("noammo");
+        if (p_sound2)
+            p_sound2->play();
         return;
+    }
     nukeCount--;
 
     weapon_vo->setValue(nukeCount);

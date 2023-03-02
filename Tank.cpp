@@ -54,6 +54,8 @@ Tank::Tank(int id, float rof) {
 
 Tank::~Tank()
 {
+
+	
 	// Send "view" event with points to interested ViewObjects.
 	// Add points.
 
@@ -116,6 +118,7 @@ void Tank::hit(const df::EventCollision* p_c) {
 		(p_c->getObject1()->getType() == "Cannon") ||
 		(p_c->getObject2()->getType() == "Cannon")){
 
+		DM.shake(33, 22, 2);
 		// Create an explosion.
 		Explosion* p_explosion = new Explosion;
 		p_explosion->setPosition(this->getPosition());

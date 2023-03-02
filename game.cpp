@@ -50,6 +50,7 @@ void loadResources(void) {
     RM.loadSound("sounds/laser.wav", "laser");
     RM.loadSound("sounds/explode.wav", "explode");
     RM.loadSound("sounds/nuke.wav", "nuke");
+    RM.loadSound("sounds/noammo.wav", "noammo");
     RM.loadSound("sounds/nukeMore.wav", "nukeMore");
     RM.loadSound("sounds/ammocollision.wav", "ammocollision");
     RM.loadSound("sounds/game-over.wav", "game over");

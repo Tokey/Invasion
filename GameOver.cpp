@@ -64,6 +64,7 @@ GameOver::~GameOver() {
         if (p_o->getType() == "GameStart") {
             p_o->setActive(true);
             dynamic_cast <GameStart*> (p_o)->playMusic(); // Resume start music.
+            dynamic_cast <GameStart*> (p_o)->viewHighScore();
         }
     }
 

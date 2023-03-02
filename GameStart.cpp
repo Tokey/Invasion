@@ -5,7 +5,7 @@
 #include "ResourceManager.h"
 #include <WorldManager.h>
 
-df::ViewObject* hs_vo = nullptr;
+
 
 void GameStart::start()
 {
@@ -23,7 +23,7 @@ void GameStart::start()
 	// When game starts, become inactive.
 	setActive(false);
 
-	WM.markForDelete(hs_vo);
+	hs_vo->setActive(false);
 }
 
 GameStart::GameStart()
@@ -41,30 +41,7 @@ GameStart::GameStart()
 	// Play start music.
 	p_music = RM.getMusic("start music");
 	playMusic();
-
-	int highscore;
-
-	FILE* filePointer;
-
-	filePointer = fopen("HighScore.txt", "r");
-	if (filePointer == nullptr)
-	{
-		filePointer = fopen("HighScore.txt", "w");
-		highscore = 0;
-		fprintf(filePointer, "%d", highscore);
-		fclose(filePointer);
-	}
-	else
-	{
-		fscanf(filePointer, "%d", &highscore);
-	}
-
-	hs_vo = new df::ViewObject; // Count of nukes.
-	hs_vo->setLocation(df::BOTTOM_CENTER);
-	hs_vo->setViewString("High Score");
-	hs_vo->setValue(highscore);
-	hs_vo->setColor(df::YELLOW);
-
+	viewHighScore();
 }
 
 
@@ -99,4 +76,30 @@ int GameStart::eventHandler(const df::Event* p_e)
 int GameStart::draw()
 {
 	return df::Object::draw();
+}
+
+void GameStart::viewHighScore() {
+	int highscore;
+
+	FILE* filePointer;
+
+	filePointer = fopen("HighScore.txt", "r");
+	if (filePointer == nullptr)
+	{
+		filePointer = fopen("HighScore.txt", "w");
+		highscore = 0;
+		fprintf(filePointer, "%d", highscore);
+		fclose(filePointer);
+	}
+	else
+	{
+		fscanf(filePointer, "%d", &highscore);
+	}
+
+	hs_vo = new df::ViewObject; // Count of nukes.
+	hs_vo->setLocation(df::BOTTOM_CENTER);
+	hs_vo->setViewString("High Score");
+	hs_vo->setValue(highscore);
+	hs_vo->setColor(df::YELLOW);
+	hs_vo->setActive(true);
 }
